@@ -4,14 +4,13 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     uid: { type: String, required: true },
-    dateOfBirth: { type: String, required: true },
+    dateOfBirth: { type: Date, required: true },
     gender: {
         type: String,
         enum: ['male', 'female', 'other'],
         required: true,
         set: (value) => value.toLowerCase()
     },
-    //age: Number,
     height: { type: Number, required: true },
     weight: { type: Number, required: true },
     goal: {
@@ -28,7 +27,7 @@ const userSchema = new mongoose.Schema({
     isTrainer: { type: Boolean, default: false },
     //if the user is not trainer then, we can include the trainer id or leave it as null :)
     trainerId: {
-        type: String,
+        type: ObjectId,
         default: null,
         validate: {
             validator: function (value) {
@@ -39,6 +38,12 @@ const userSchema = new mongoose.Schema({
     },
 })
 
-const user = mongoose.model('users', userSchema)
+const excerciseSchema = new mongoose.Schema({
+    name: String,
+    description: String
+})
 
-module.exports = { user }
+const user = mongoose.model('users', userSchema)
+const excercise = mongoose.model('excercise', excerciseSchema)
+
+module.exports = { user, excercise }
